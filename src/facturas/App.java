@@ -77,11 +77,13 @@ public class App {
 
             List<Factura> encontrados = new ArrayList<Factura>();
             Date fecha;
-            int opcion;
+            int opcion, cantidad;
+            double codigo;
 
-            System.out.println("1. Filtrar por fecha");
+            System.out.println("\n1. Filtrar por fecha");
             System.out.println("2. Filtrar por cantidades");    
             System.out.println("3. Filtrar por código de factura.");
+            System.out.println("4. Salir");
             System.out.print("Opción --> ");
 
             try{
@@ -92,10 +94,11 @@ public class App {
             }
 
             switch(opcion){
-                case 1:
+                case 1: //PRINCIPAL 1
                     System.out.println("\n1. Consultar por fechas iguales: ");
                     System.out.println("2. Consultar hasta fecha específica: ");
                     System.out.println("3. Consultar después de fecha específica: ");
+                    System.out.print("Opción --> ");
                     try{
                         opcion = Integer.parseInt(sc.nextLine());
                     } catch (Exception ex){
@@ -104,7 +107,7 @@ public class App {
                     }
                     switch(opcion){
                         case 1:
-                            System.out.println("Ingrese la fecha a consultar en formato dd/MM/yyyy: ");
+                            System.out.print("Ingrese la fecha a consultar en formato dd/MM/yyyy: ");
                             try {
                                 fecha = new SimpleDateFormat("dd/MM/yyyy").parse(sc.nextLine());
                             } catch (ParseException e) {
@@ -113,7 +116,7 @@ public class App {
                             }
 
                             for (Factura factura: lista){
-                                if (factura.getFecha() == fecha){
+                                if (factura.getFecha().equals(fecha)){
                                     encontrados.add(factura);
                                 }
                             }
@@ -123,7 +126,7 @@ public class App {
                             break;
                         
                         case 2:
-                            System.out.println("Ingrese la fecha a consultar en formato dd/MM/yyyy: ");
+                            System.out.print("Ingrese la fecha a consultar en formato dd/MM/yyyy: ");
                             try {
                                 fecha = new SimpleDateFormat("dd/MM/yyyy").parse(sc.nextLine());
                             } catch (ParseException e) {
@@ -159,8 +162,118 @@ public class App {
                             imprimirFacturas(encontrados);
 
                             break;
+                        
+                        default:
+                            System.out.println("\nERROR: opción no permitida...");
+                            return;
 
                     }
+
+                    break;
+                
+                case 2: //PRINCIPAL 2
+                    System.out.println("\n1. Consultar por cantidades iguales: ");
+                    System.out.println("2. Consultar cantidades menores: ");
+                    System.out.println("3. Consultar cantidades mayores: ");
+                    System.out.print("---> ");
+                    try {
+                        opcion = Integer.parseInt(sc.nextLine());
+                    } catch (Exception ex) {
+                        System.out.println("ERROR: solo se admiten números. Reiniciando filtros...");
+                        continue;
+                    }
+                    switch (opcion) {
+                        case 1:
+                            System.out.print("\nIngrese la cantidad a consultar: ");
+                            try {
+                                cantidad = Integer.parseInt(sc.nextLine());
+                            } catch (Exception e) {
+                                System.out.println("ERROR: solo se admiten números. Saliendo...");
+                                return;
+                            }
+
+                            for (Factura factura : lista) {
+                                if (factura.getCantidad() == cantidad) {
+                                    encontrados.add(factura);
+                                }
+                            }
+
+                            imprimirFacturas(encontrados);
+
+                            break;
+
+                        case 2:
+                            System.out.print("\nIngrese la cantidad límite superior: ");
+                            try {
+                                cantidad = Integer.parseInt(sc.nextLine());
+                            } catch (Exception e) {
+                                System.out.println("ERROR: solo se admiten números. Saliendo...");
+                                return;
+                            }
+
+                            for (Factura factura : lista) {
+                                if (factura.getCantidad() < cantidad) {
+                                    encontrados.add(factura);
+                                }
+                            }
+
+                            imprimirFacturas(encontrados);
+
+                            break;
+
+                        case 3:
+                        System.out.print("\nIngrese la cantidad límite inferior: ");
+                        try {
+                            cantidad = Integer.parseInt(sc.nextLine());
+                        } catch (Exception e) {
+                            System.out.println("ERROR: solo se admiten números. Saliendo...");
+                            return;
+                        }
+
+                        for (Factura factura : lista) {
+                            if (factura.getCantidad() > cantidad) {
+                                encontrados.add(factura);
+                            }
+                        }
+
+                        imprimirFacturas(encontrados);
+
+                        break;
+
+                        default:
+                            System.out.println("\nERROR: opción no permitida...");
+                            return;
+
+                    }
+
+                    break;
+                
+                case 3:
+                    System.out.print("Ingrese el código a buscar: ");
+                    try{
+                        codigo = Double.parseDouble(sc.nextLine());
+                    } catch (Exception ex){
+                        System.out.println("ERROR: solo se admiten números. Saliendo...");
+                        return;
+                    }
+
+                    for (Factura factura: lista){
+                        if (factura.getCodigo() == codigo){
+                            encontrados.add(factura);
+                        }
+                    }
+
+                    imprimirFacturas(encontrados);
+
+                    break;
+                
+                case 4:
+                    enBucle = false;
+                    return;
+
+                default:
+                    System.out.println("ERROR: opción no permitida. Saliendo...");
+                    return;
             }
 
         } while (enBucle);
