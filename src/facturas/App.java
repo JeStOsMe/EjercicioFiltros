@@ -71,6 +71,99 @@ public class App {
 
     public static void filtros(List<Factura> lista){
         
+        boolean enBucle = true;
+
+        do{
+
+            List<Factura> encontrados = new ArrayList<Factura>();
+            Date fecha;
+            int opcion;
+
+            System.out.println("1. Filtrar por fecha");
+            System.out.println("2. Filtrar por cantidades");    
+            System.out.println("3. Filtrar por código de factura.");
+            System.out.print("Opción --> ");
+
+            try{
+                opcion = Integer.parseInt(sc.nextLine());
+            } catch (Exception ex){
+                System.out.println("ERROR: solo se admiten números. Reiniciando filtros...");
+                continue;
+            }
+
+            switch(opcion){
+                case 1:
+                    System.out.println("\n1. Consultar por fechas iguales: ");
+                    System.out.println("2. Consultar hasta fecha específica: ");
+                    System.out.println("3. Consultar después de fecha específica: ");
+                    try{
+                        opcion = Integer.parseInt(sc.nextLine());
+                    } catch (Exception ex){
+                        System.out.println("ERROR: solo se admiten números. Reiniciando filtros...");
+                        continue;
+                    }
+                    switch(opcion){
+                        case 1:
+                            System.out.println("Ingrese la fecha a consultar en formato dd/MM/yyyy: ");
+                            try {
+                                fecha = new SimpleDateFormat("dd/MM/yyyy").parse(sc.nextLine());
+                            } catch (ParseException e) {
+                                System.out.println("ERROR: formato mal ingresado. Obteniendo fecha actual");
+                                fecha = Calendar.getInstance().getTime();
+                            }
+
+                            for (Factura factura: lista){
+                                if (factura.getFecha() == fecha){
+                                    encontrados.add(factura);
+                                }
+                            }
+
+                            imprimirFacturas(encontrados);
+
+                            break;
+                        
+                        case 2:
+                            System.out.println("Ingrese la fecha a consultar en formato dd/MM/yyyy: ");
+                            try {
+                                fecha = new SimpleDateFormat("dd/MM/yyyy").parse(sc.nextLine());
+                            } catch (ParseException e) {
+                                System.out.println("ERROR: formato mal ingresado. Obteniendo fecha actual");
+                                fecha = Calendar.getInstance().getTime();
+                            }
+                            
+                            for (Factura factura: lista){
+                                if (factura.getFecha().before(fecha)){
+                                    encontrados.add(factura);
+                                }
+                            }
+
+                            imprimirFacturas(encontrados);
+
+                            break;
+                        
+                        case 3:
+                            System.out.println("Ingrese la fecha a consultar en formato dd/MM/yyyy: ");
+                            try {
+                                fecha = new SimpleDateFormat("dd/MM/yyyy").parse(sc.nextLine());
+                            } catch (ParseException e) {
+                                System.out.println("ERROR: formato mal ingresado. Obteniendo fecha actual");
+                                fecha = Calendar.getInstance().getTime();
+                            }
+                            
+                            for (Factura factura: lista){
+                                if (factura.getFecha().after(fecha)){
+                                    encontrados.add(factura);
+                                }
+                            }
+
+                            imprimirFacturas(encontrados);
+
+                            break;
+
+                    }
+            }
+
+        } while (enBucle);
     }
 
     public static Factura crearFactura(){
